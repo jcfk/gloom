@@ -15,10 +15,12 @@ err() {
 }
 
 if_print_and_exit() {
-    if [ $PRINT_OPENER ] ; then
+    if [ "$PRINT_OPENER" ] ; then
         echo "$1" ; exit 1
     fi
 }
+
+# 1. Handle args
 
 DETACH=""
 TABBED_XID=""
@@ -61,6 +63,8 @@ else
     err "no file provided"
 fi
 
+# 2. Open file
+
 EXT="${FILE##*.}"
 case "$EXT" in
     epub)
@@ -74,7 +78,7 @@ case "$EXT" in
             zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" \
                 "$FILE" >/dev/null 2>&1 &
         else
-            if [ "$NO_TABBED" ] ; then
+            if [ "$NO_TABBED" ] ; then # by default it opens in tabbed
                 zathura -c "$SYSTEM/config/zathura" \
                     "$FILE" >/dev/null 2>&1 &
             else
@@ -104,13 +108,15 @@ case "$EXT" in
         mpv "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
+    *)
+        if_print_and_exit "vim"
+
+        if [ "$DETACH" ] ; then
+            st -e bash -i -c "vim \"$FILE\"" &
+        else
+            vim "$FILE"
+        fi
+        exit 0
+        ;;
 esac
-
-if_print_and_exit "vim"
-
-if [ "$DETACH" ] ; then
-    st -e bash -i -c "vim \"$FILE\"" &
-else
-    vim "$FILE"
-fi
 
