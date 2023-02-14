@@ -4,8 +4,8 @@ HELP="USAGE:
   gloom [OPTION...] _file_
 
 Options:
-  --detach              Opened in background, in different window
-  --tabbed tabbedxid    Open window under instance of tabbed specified by tabbedxid
+  --detach              Open in background, in new window
+  --tabbed _tabbedxid_  Open window under instance of tabbed specified by tabbedxid
   --no-tabbed           Do not create a new instance of tabbed
   --print-opener        Only print name of program used to open file and exit
   --help                Print this message"
@@ -74,11 +74,11 @@ case "$EXT" in
     pdf|djvu|PDF)
         if_print_and_exit "zathura"
 
-        if [ "$TABBED_XID" ] ; then # set shorter X names for tabbed windows, or maybe not
+        if [ "$TABBED_XID" ] ; then
             zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" \
                 "$FILE" >/dev/null 2>&1 &
         else
-            if [ "$NO_TABBED" ] ; then # by default it opens in tabbed
+            if [ "$NO_TABBED" ] ; then # by default it creates a new instance of tabbed
                 zathura -c "$SYSTEM/config/zathura" \
                     "$FILE" >/dev/null 2>&1 &
             else
