@@ -71,7 +71,7 @@ case "$EXT" in
         calibre "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
-    pdf|djvu|PDF)
+    pdf|djvu|PDF|ps)
         if_print_and_exit "zathura"
 
         if [ "$TABBED_XID" ] ; then
