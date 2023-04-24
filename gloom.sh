@@ -88,6 +88,10 @@ case "$EXT" in
         fi
         exit 0
         ;;
+    dvi)
+        evince "$FILE" >/dev/null 2>&1 &
+        exit 0
+        ;;
     jpeg|JPEG|jpg|JPG|png|PNG|webp|tif|avif|tiff)
         feh --start-at "$FILE" >/dev/null 2>&1 &
         exit 0
