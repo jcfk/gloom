@@ -104,7 +104,7 @@ case "$EXT" in
         feh --conversion-timeout 1 "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
-    mp3|m4a|oga|ogg|wav|aiff|au)
+    mp3|m4a|oga|ogg|wav|aiff|au|ogx)
         mpv --no-audio-display "$FILE"
         exit 0
         ;;
