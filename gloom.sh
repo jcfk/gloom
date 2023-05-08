@@ -68,6 +68,8 @@ fi
 EXT="${FILE##*.}"
 case "$EXT" in
     epub)
+        if_print_and_exit "calibre"
+
         calibre "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
@@ -89,26 +91,38 @@ case "$EXT" in
         exit 0
         ;;
     dvi)
+        if_print_and_exit "evince"
+
         evince "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
     jpeg|JPEG|jpg|JPG|png|PNG|webp|tif|avif|tiff)
+        if_print_and_exit "feh"
+
         feh --start-at "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
     gif)
+        if_print_and_exit "sxiv"
+
         sxiv -a "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
     svg)
+        if_print_and_exit "feh"
+
         feh --conversion-timeout 1 "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
     mp3|m4a|oga|ogg|wav|aiff|au|ogx)
+        if_print_and_exit "mpv"
+
         mpv --no-audio-display "$FILE"
         exit 0
         ;;
     mp4|mkv|mov|webm|ogv|MOV)
+        if_print_and_exit "mpv"
+
         mpv "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
