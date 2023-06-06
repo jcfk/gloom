@@ -59,6 +59,7 @@ done
 
 if [ "${ARGS[0]}" ] ; then
     FILE="${ARGS[0]}"
+    echo "$FILE" >> /home/jacob/main/sync/corpus/system/logs/glooms
 else
     err "no file provided"
 fi
@@ -80,11 +81,11 @@ case "$EXT" in
             zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" \
                 "$FILE" >/dev/null 2>&1 &
         else
-            if [ "$NO_TABBED" ] ; then # by default it creates a new instance of tabbed
+            if [ "$NO_TABBED" ] ; then # do not open in a new instance of tabbed
                 zathura -c "$SYSTEM/config/zathura" \
                     "$FILE" >/dev/null 2>&1 &
             else
-                tabbed -c -r 2 zathura -e '' -c "$SYSTEM/config/zathura" \
+                tabbed -b -c -r 2 zathura -e '' -c "$SYSTEM/config/zathura" \
                     "$FILE" >/dev/null 2>&1 &
             fi
         fi
