@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 HELP="USAGE:
   gloom [OPTION...] _file_
