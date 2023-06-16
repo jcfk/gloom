@@ -1,11 +1,11 @@
-#!/bin/bash
+!/bin/bash
 
 HELP="USAGE:
   gloom [OPTION...] _file_
 
 Options:
   --detach              Open in background, in new window
-  --tabbed _tabbedxid_  Open window under instance of tabbed specified by tabbedxid
+  --tabbed _tabbedxid_  Open window under instance of tabbed specified by tabbedxid (0x hex)
   --no-tabbed           Do not create a new instance of tabbed
   --print-opener        Only print name of program used to open file and exit
   --help                Print this message"
@@ -85,8 +85,8 @@ case "$EXT" in
                 zathura -c "$SYSTEM/config/zathura" \
                     "$FILE" >/dev/null 2>&1 &
             else
-                tabbed -b -c -r 2 zathura -e '' -c "$SYSTEM/config/zathura" \
-                    "$FILE" >/dev/null 2>&1 &
+                tabbed -d -b -c -r 2 zathura -e '' -c "$SYSTEM/config/zathura" \
+                    "$FILE"
             fi
         fi
         exit 0
