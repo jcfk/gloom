@@ -5,9 +5,10 @@ HELP="USAGE:
 
 Options:
   --detach              Open in background, in new window
-  --tabbed _tabbedxid_  Open window under instance of tabbed specified by tabbedxid (0x hex)
   --no-tabbed           Do not create a new instance of tabbed
+  --tabbed _tabbedxid_  Open window under instance of tabbed specified by tabbedxid (0x hex)
   --print-opener        Only print name of program used to open file and exit
+  --print-tabbed-xid    If opening a new tabbed instance, print its xid to stdout
   --help                Print this message"
 
 err() {
@@ -26,6 +27,7 @@ DETACH=""
 TABBED_XID=""
 NO_TABBED=""
 PRINT_OPENER=""
+PRINT_TABBED_XID=""
 ARGS=()
 
 while [ "$1" ] ; do
@@ -42,6 +44,9 @@ while [ "$1" ] ; do
         ;;
         "--print-opener")
             PRINT_OPENER=1
+        ;;
+        "--print-tabbed-xid")
+            PRINT_TABBED_XID=1
         ;;
         "--help")
             echo "$HELP" ; exit 0
@@ -78,16 +83,18 @@ case "$EXT" in
         if_print_and_exit "zathura"
 
         if [ "$TABBED_XID" ] ; then
-            zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" \
-                "$FILE" >/dev/null 2>&1 &
-        else
-            if [ "$NO_TABBED" ] ; then # do not open in a new instance of tabbed
-                zathura -c "$SYSTEM/config/zathura" \
-                    "$FILE" >/dev/null 2>&1 &
-            else
-                tabbed -d -b -c -r 2 zathura -e '' -c "$SYSTEM/config/zathura" \
-                    "$FILE"
-            fi
+            zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
+            exit 0
+        fi
+
+        if [ "$NO_TABBED" ] ; then
+            zathura -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
+            exit 0
+        fi
+
+        NEW_XID=$(tabbed -d -b -c -r 2 zathura -e '' -c "$SYSTEM/config/zathura" "$FILE" 2>/dev/null)
+        if [ $PRINT_TABBED_XID ] ; then
+            echo "$NEW_XID"
         fi
         exit 0
         ;;
