@@ -6,7 +6,7 @@ HELP="USAGE:
 Options:
   --detach              Open in background, in new window
   --no-tabbed           Do not create a new instance of tabbed
-  --tabbed _tabbedxid_  Open window under instance of tabbed specified by tabbedxid (0x hex)
+  --tabbed _tabbedxid_  Open window under instance of tabbed specified by tabbedxid (0x...)
   --print-opener        Only print name of program used to open file and exit
   --print-tabbed-xid    If opening a new tabbed instance, print its xid to stdout
   --help                Print this message"
@@ -92,7 +92,8 @@ case "$EXT" in
             exit 0
         fi
 
-        NEW_XID=$(tabbed -d -b -c -r 2 zathura -e '' -c "$SYSTEM/config/zathura" "$FILE" 2>/dev/null)
+        NEW_XID=$(tabbed -d -b -c -r 2 \
+            zathura -e '' -c "$SYSTEM/config/zathura" "$FILE" 2>/dev/null)
         if [ $PRINT_TABBED_XID ] ; then
             echo "$NEW_XID"
         fi
@@ -104,7 +105,7 @@ case "$EXT" in
         evince "$FILE" >/dev/null 2>&1 &
         exit 0
         ;;
-    jpeg|JPEG|jpg|JPG|png|PNG|webp|tif|avif|tiff)
+    jpeg|JPEG|jpg|JPG|png|PNG|webp|tif|avif|tiff|heic)
         if_print_and_exit "feh"
 
         feh --start-at "$FILE" >/dev/null 2>&1 &
