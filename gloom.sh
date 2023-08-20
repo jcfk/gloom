@@ -82,13 +82,13 @@ case "$EXT" in
     pdf|djvu|PDF|ps)
         if_print_and_exit "zathura"
 
-        if [ "$TABBED_XID" ] ; then
-            zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
+        if [ "$NO_TABBED" ] ; then
+            zathura -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
             exit 0
         fi
 
-        if [ "$NO_TABBED" ] ; then
-            zathura -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
+        if [ "$TABBED_XID" ] ; then
+            zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
             exit 0
         fi
 
@@ -139,7 +139,7 @@ case "$EXT" in
         if_print_and_exit "vim"
 
         if [ "$DETACH" ] ; then
-            st -e bash -i -c "vim \"$FILE\"" &
+            st -e bash -i -c "vim \"$FILE\"" >/dev/null 2>&1 &
         else
             vim "$FILE"
         fi
