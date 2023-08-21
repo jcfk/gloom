@@ -9,6 +9,8 @@ Options:
   --tabbed _tabbedxid_  Open window under instance of tabbed specified by tabbedxid (0x...)
   --print-opener        Only print name of program used to open file and exit
   --print-tabbed-xid    If opening a new tabbed instance, print its xid to stdout
+  --rg-line-num         Plaintext filenames may have a line number appended with colon (ex. 
+                        file.txt:53), and will open there
   --help                Print this message"
 
 err() {
@@ -28,6 +30,7 @@ TABBED_XID=""
 NO_TABBED=""
 PRINT_OPENER=""
 PRINT_TABBED_XID=""
+RG_LINE_NUM=""
 ARGS=()
 
 while [ "$1" ] ; do
@@ -48,6 +51,9 @@ while [ "$1" ] ; do
         "--print-tabbed-xid")
             PRINT_TABBED_XID=1
         ;;
+        "--rg-line-num")
+            RG_LINE_NUM=1
+        ;;
         "--help")
             echo "$HELP" ; exit 0
         ;;
@@ -67,6 +73,12 @@ if [ "${ARGS[0]}" ] ; then
     echo "$FILE" >> /home/jacob/main/sync/corpus/system/logs/glooms
 else
     err "no file provided"
+fi
+
+if [ "$RG_LINE_NUM" ] ; then
+    FILENAME="${FILE%:*}"
+    LINE_NUM="${FILE##*:}"
+    FILE="$FILENAME"
 fi
 
 # 2. Open file
@@ -139,9 +151,17 @@ case "$EXT" in
         if_print_and_exit "vim"
 
         if [ "$DETACH" ] ; then
-            st -e bash -i -c "vim \"$FILE\"" >/dev/null 2>&1 &
+            if [ "$RG_LINE_NUM" ] ; then
+                st -e bash -i -c "vim +$LINE_NUM \"$FILE\"" >/dev/null 2>&1 &
+            else
+                st -e bash -i -c "vim \"$FILE\"" >/dev/null 2>&1 &
+            fi
         else
-            vim "$FILE"
+            if [ "$RG_LINE_NUM" ] ; then
+                vim +$LINE_NUM "$FILE"
+            else
+                vim "$FILE"
+            fi
         fi
         exit 0
         ;;
