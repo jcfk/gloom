@@ -85,7 +85,7 @@ fi
 
 EXT="${FILE##*.}"
 case "$EXT" in
-    epub)
+    epub|mobi)
         if_print_and_exit "calibre"
 
         calibre "$FILE" >/dev/null 2>&1 &
