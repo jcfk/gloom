@@ -19,7 +19,7 @@ err() {
 
 if_print_and_exit() {
     if [ "$PRINT_OPENER" ] ; then
-        echo "$1" ; exit 1
+        echo "$1" ; exit 0
     fi
 }
 
