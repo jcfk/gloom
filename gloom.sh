@@ -18,7 +18,7 @@ err() {
 }
 
 if_print_and_exit() {
-    if [ "$PRINT_OPENER" ] ; then
+    if [[ "$PRINT_OPENER" ]] ; then
         echo "$1" ; exit 0
     fi
 }
@@ -33,7 +33,7 @@ PRINT_TABBED_XID=""
 RG_LINE_NUM=""
 ARGS=()
 
-while [ "$1" ] ; do
+while [[ "$1" ]] ; do
     case "$1" in
         "--detach")
             DETACH=1
@@ -58,7 +58,7 @@ while [ "$1" ] ; do
             echo "$HELP" ; exit 0
         ;;
         *)
-            if [ "${1:0:1}" == "-" ] ; then
+            if [[ "${1:0:1}" == "-" ]] ; then
                 err "unknown option \"$1\""
             else
                 ARGS+=("$1")
@@ -68,14 +68,14 @@ while [ "$1" ] ; do
     shift
 done
 
-if [ "${ARGS[0]}" ] ; then
+if [[ "${ARGS[0]}" ]] ; then
     FILE="${ARGS[0]}"
     echo "$FILE" >> /home/jacob/main/sync/corpus/system/logs/glooms
 else
     err "no file provided"
 fi
 
-if [ "$RG_LINE_NUM" ] ; then
+if [[ "$RG_LINE_NUM" ]] ; then
     FILENAME="${FILE%:*}"
     LINE_NUM="${FILE##*:}"
     FILE="$FILENAME"
@@ -94,19 +94,19 @@ case "$EXT" in
     pdf|djvu|PDF|ps)
         if_print_and_exit "zathura"
 
-        if [ "$NO_TABBED" ] ; then
+        if [[ "$NO_TABBED" ]] ; then
             zathura -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
             exit 0
         fi
 
-        if [ "$TABBED_XID" ] ; then
+        if [[ "$TABBED_XID" ]] ; then
             zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
             exit 0
         fi
 
         NEW_XID=$(tabbed -d -b -c -r 2 \
             zathura -e '' -c "$SYSTEM/config/zathura" "$FILE" 2>/dev/null)
-        if [ $PRINT_TABBED_XID ] ; then
+        if [[ $PRINT_TABBED_XID ]] ; then
             echo "$NEW_XID"
         fi
         exit 0
@@ -150,14 +150,14 @@ case "$EXT" in
     *)
         if_print_and_exit "vim"
 
-        if [ "$DETACH" ] ; then
-            if [ "$RG_LINE_NUM" ] ; then
+        if [[ "$DETACH" ]] ; then
+            if [[ "$RG_LINE_NUM" ]] ; then
                 st -e bash -i -c "vim +$LINE_NUM \"$FILE\"" >/dev/null 2>&1 &
             else
                 st -e bash -i -c "vim \"$FILE\"" >/dev/null 2>&1 &
             fi
         else
-            if [ "$RG_LINE_NUM" ] ; then
+            if [[ "$RG_LINE_NUM" ]] ; then
                 vim +$LINE_NUM "$FILE"
             else
                 vim "$FILE"
