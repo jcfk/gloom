@@ -138,7 +138,11 @@ case "$EXT" in
     mp3|m4a|oga|ogg|wav|aiff|au|ogx|wma)
         if_print_and_exit "mpv"
 
-        mpv --no-audio-display "$FILE"
+        if [[ "$DETACH" ]] ; then
+            st -e bash -i -c "mpv --no-audio-display \"$FILE\"" >/dev/null 2>&1 &
+        else
+            mpv --no-audio-display "$FILE"
+        fi
         exit 0
         ;;
     mp4|mkv|mov|webm|ogv|MOV)
