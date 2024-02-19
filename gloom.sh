@@ -94,23 +94,27 @@ case "$EXT" in
         exit 0
         ;;
     pdf|djvu|PDF|ps)
-        if_print_and_exit "zathura"
+        # if_print_and_exit "zathura"
 
-        if [[ "$NOT_TABBED" ]] ; then
-            zathura -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
-            exit 0
-        fi
+        # if [[ "$NOT_TABBED" ]] ; then
+        #     zathura -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
+        #     exit 0
+        # fi
 
-        if [[ "$TABBED_XID" ]] ; then
-            zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
-            exit 0
-        fi
+        # if [[ "$TABBED_XID" ]] ; then
+        #     zathura -e "$TABBED_XID" -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
+        #     exit 0
+        # fi
 
-        NEW_XID=$(tabbed -d -b -c -r 2 \
-            zathura -e '' -c "$SYSTEM/config/zathura" "$FILE" 2>/dev/null)
-        if [[ $PRINT_TABBED_XID ]] ; then
-            echo "$NEW_XID"
-        fi
+        # NEW_XID=$(tabbed -d -b -c -r 2 \
+        #     zathura -e '' -c "$SYSTEM/config/zathura" "$FILE" 2>/dev/null)
+        # if [[ $PRINT_TABBED_XID ]] ; then
+        #     echo "$NEW_XID"
+        # fi
+
+	if_print_and_exit "okular"
+	okular "$FILE" >/dev/null 2>&1 &
+
         exit 0
         ;;
     dvi)
