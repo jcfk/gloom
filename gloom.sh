@@ -5,10 +5,10 @@ HELP="USAGE:
 
 Options:
   --detach              Open in background, in new window
-  --no-tabbed           Do not create a new instance of tabbed
-  --tabbed _tabbedxid_  Open window under instance of tabbed specified by tabbedxid (0x...)
+  --no-tabbed           For pdfs, do not open in a new instance of tabbed
+  --tabbed _tabbedxid_  For pdfs, reparent under tabbedxid (0x...)
   --print-opener        Only print name of program used to open file and exit
-  --print-tabbed-xid    If opening a new tabbed instance, print its xid to stdout
+  --print-tabbed-xid    If creating a new tabbed instance, print its xid to stdout
   --rg-line-num         Plaintext filenames may have a line number appended with colon (ex. 
                         file.txt:53), and will open there
   --help                Print this message"
@@ -35,7 +35,7 @@ ARGS=()
 
 while [[ "$1" ]] ; do
     case "$1" in
-        "--detach")
+        "--detach") # meaning of this?
             DETACH=1
         ;;
         "--tabbed")
@@ -139,9 +139,9 @@ case "$EXT" in
         if_print_and_exit "mpv"
 
         if [[ "$DETACH" ]] ; then
-            st -e bash -i -c "mpv --no-audio-display \"$FILE\"" >/dev/null 2>&1 &
+            st -e bash -i -c "mpv --audio-display=no \"$FILE\"" >/dev/null 2>&1 &
         else
-            mpv --no-audio-display "$FILE"
+            mpv --audio-display=no "$FILE"
         fi
         exit 0
         ;;
