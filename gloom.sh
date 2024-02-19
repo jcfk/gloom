@@ -4,13 +4,15 @@ HELP="USAGE:
   gloom [OPTION...] _file_
 
 Options:
-  --detach              Open in background, in new window
-  --no-tabbed           For pdfs, do not open in a new instance of tabbed
+  --not-tabbed          For pdfs, do not open in an instance of tabbed
   --tabbed _tabbedxid_  For pdfs, reparent under tabbedxid (0x...)
-  --print-opener        Only print name of program used to open file and exit
-  --print-tabbed-xid    If creating a new tabbed instance, print its xid to stdout
   --rg-line-num         Plaintext filenames may have a line number appended with colon (ex. 
                         file.txt:53), and will open there
+  --detach              For audio and plaintext, open in new terminal window
+
+  --print-opener        Only print name of program used to open file and exit
+  --print-tabbed-xid    If creating a new tabbed instance, print its xid to stdout
+
   --help                Print this message"
 
 err() {
@@ -27,7 +29,7 @@ if_print_and_exit() {
 
 DETACH=""
 TABBED_XID=""
-NO_TABBED=""
+NOT_TABBED=""
 PRINT_OPENER=""
 PRINT_TABBED_XID=""
 RG_LINE_NUM=""
@@ -35,15 +37,15 @@ ARGS=()
 
 while [[ "$1" ]] ; do
     case "$1" in
-        "--detach") # meaning of this?
+        "--detach")
             DETACH=1
         ;;
         "--tabbed")
             TABBED_XID="$2"
             shift
         ;;
-        "--no-tabbed")
-            NO_TABBED=1
+        "--not-tabbed")
+            NOT_TABBED=1
         ;;
         "--print-opener")
             PRINT_OPENER=1
@@ -94,7 +96,7 @@ case "$EXT" in
     pdf|djvu|PDF|ps)
         if_print_and_exit "zathura"
 
-        if [[ "$NO_TABBED" ]] ; then
+        if [[ "$NOT_TABBED" ]] ; then
             zathura -c "$SYSTEM/config/zathura" "$FILE" >/dev/null 2>&1 &
             exit 0
         fi
